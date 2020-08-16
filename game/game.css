@@ -1,0 +1,28 @@
+html {
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+body {
+  height: 100%;
+  background: aliceblue;
+}
+#root {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+#gameContainer {
+  width: 200px;
+  display: flex;
+  flex-wrap: wrap;
+}
+.cell {
+  width: 20px;
+  height: 20px;
+  border: 1px solid black;
+  box-sizing: border-box;
+}
