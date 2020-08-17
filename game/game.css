@@ -16,11 +16,11 @@ body {
   align-items: center;
 }
 #gameContainer {
-  width: 200px;
+  width: 440px;  /* cell width * (game size + 2) */
   display: flex;
   flex-wrap: wrap;
 }
-.cell {
+.cell, .wall, .door {
   width: 20px;
   height: 20px;
   border: 1px solid black;
@@ -29,8 +29,11 @@ body {
 .snake {
   background-color: red;
 }
-.blue {
-  background-color: blue;
+.wall {
+  background-color: darkblue;
+}
+.door {
+  background-color: yellow;
 }
 .food {
   background-color: green;

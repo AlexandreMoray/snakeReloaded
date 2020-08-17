@@ -1,5 +1,5 @@
 const root = document.getElementById("root");
-const GAME_TERRAIN_WIDTH = 10; // cells
+const GAME_SIZE = 20; // cells (pair)
 const GAME_SPEED = 200; // ms
 
 (() => {
@@ -17,17 +17,50 @@ async function sleep(time) {
     return new Promise(r => setTimeout(r, time));
 }
 
+/**
+ * Creates a nex div with specified type and returns it.
+ * @param type={"cell"|"wall"|"door"}
+ * @returns {HTMLDivElement}
+ */
+function generate(type = "cell") {
+    const wall = document.createElement("div");
+    wall.classList.add(type);
+    return wall;
+}
+
+/**
+ * Returns true if given index is a door in the wall of the given length.
+ * @param index
+ * @param wallLength
+ * @returns {boolean}
+ */
+function isDoor(index, wallLength = GAME_SIZE) {
+    return (index == wallLength/2 || index == wallLength/2 -1);
+}
+
 function init() {
     const container = document.createElement("div");
     container.id="gameContainer";
 
-    for(let i=0; i<GAME_TERRAIN_WIDTH; ++i) {
-        for(let j=0; j<GAME_TERRAIN_WIDTH; ++j) {
-            const cell = document.createElement("div");
+    for(let i=0; i<GAME_SIZE+2; ++i) {
+        // First wall line
+        container.appendChild(generate(isDoor(i, GAME_SIZE+2) ? "door" : "wall"));
+    }
+    for(let i=0; i<GAME_SIZE; ++i) {
+        // Left wall column
+        container.appendChild(generate(isDoor(i) ? "door" : "wall"));
+        // All game cells
+        for(let j=0; j<GAME_SIZE; ++j) {
+            const cell = generate("cell");
             cell.id = `${j}:${i}`;
-            cell.classList.add("cell");
             container.appendChild(cell);
         }
+        // Right wall column
+        container.appendChild(generate(isDoor(i) ? "door" : "wall"));
+    }
+    for(let i=0; i<GAME_SIZE+2; ++i) {
+        // Last wall line
+        container.appendChild(generate(isDoor(i, GAME_SIZE+2) ? "door" : "wall"));
     }
 
     return container;
@@ -49,7 +82,7 @@ function elementToPos(element) {
  * @returns {HTMLElement|undefined}
  */
 function posToElement(pos) {
-    if(pos.x >= 0 && pos.y >= 0 && pos.x < GAME_TERRAIN_WIDTH && pos.y < GAME_TERRAIN_WIDTH) {
+    if(pos.x >= 0 && pos.y >= 0 && pos.x < GAME_SIZE && pos.y < GAME_SIZE) {
         return document.getElementById(`${pos.x}:${pos.y}`);
     } else {
         return undefined;
@@ -63,10 +96,23 @@ function posToElement(pos) {
  * @returns {{x: *, y: *}}
  */
 function nextCellPos(position, direction) {
-    return {
+    let nextPos = {
         x: position.x + direction.x,
-        y: position.y + direction.y,
+        y: position.y + direction.y
+    };
+
+    // Teleport symmetrically if head is going through a door (2 cells in middle of walls).
+    if(nextPos.x < 0 && isDoor(nextPos.y)) {
+        nextPos.x = GAME_SIZE-1;
+    } else if(nextPos.x >= GAME_SIZE && isDoor(nextPos.y)) {
+        nextPos.x = 0;
+    } else if(nextPos.y < 0 && isDoor(nextPos.x)) {
+        nextPos.y = GAME_SIZE-1;
+    } else if(nextPos.y >= GAME_SIZE && isDoor(nextPos.x)) {
+        nextPos.y = 0;
     }
+
+    return nextPos;
 }
 
 async function start() {
@@ -122,8 +168,8 @@ function throwFood() {
     let x, y, cell;
 
     do {
-        x = Math.floor(Math.random()*GAME_TERRAIN_WIDTH);
-        y = Math.floor(Math.random()*GAME_TERRAIN_WIDTH);
+        x = Math.floor(Math.random()*GAME_SIZE);
+        y = Math.floor(Math.random()*GAME_SIZE);
         cell = document.getElementById(`${x}:${y}`);
     } while(!cell || cell.classList.contains("snake"));
 
