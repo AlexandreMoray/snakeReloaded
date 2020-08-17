@@ -26,3 +26,12 @@ body {
   border: 1px solid black;
   box-sizing: border-box;
 }
+.red {
+  background-color: red;
+}
+.blue {
+  background-color: blue;
+}
+.green {
+  background-color: green;
+}
