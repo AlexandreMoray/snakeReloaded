@@ -1,4 +1,4 @@
-import {GAME_SIZE} from "../constants/constants.js";
+import {GAME_SIZE, CELL_ID, SNAKE_PREFIX} from "../constants/constants.js";
 
 /**
  * Wait the amount of milliseconds given.
@@ -14,7 +14,7 @@ export async function sleep(time) {
  * @param type={"cell"|"wall"|"door"}
  * @returns {HTMLDivElement}
  */
-export function generate(type = "cell") {
+export function generate(type = CELL_ID) {
     const wall = document.createElement("div");
     wall.classList.add(type);
     return wall;
@@ -31,16 +31,35 @@ export function isDoor(index, wallLength = GAME_SIZE) {
 }
 
 /**
+ * Returns random position object between given limits.
+ */
+export function randomPosition(min = 0, max = GAME_SIZE) {
+    const randomPos = { x: null, y: null };
+
+    Object.keys(randomPos)
+        .forEach( key => {
+            randomPos[key] = Math.floor(Math.random()*(max - min) + min);
+        });
+
+    return randomPos;
+}
+
+/**
  * Spawns food randomly on the map.
  */
 export function throwFood() {
     let x, y, cell;
 
     do {
-        x = Math.floor(Math.random()*GAME_SIZE);
-        y = Math.floor(Math.random()*GAME_SIZE);
+        const {x, y} = randomPosition();
         cell = document.getElementById(`${x}:${y}`);
-    } while(!cell || !cell.classList.contains("cell") || cell.classList.contains("snake"));
+    } while(
+        !cell
+        || !cell.classList.contains(CELL_ID)
+        || cell.classList.contains(SNAKE_PREFIX + 1)
+        || cell.classList.contains(SNAKE_PREFIX + 2)
+        || cell.classList.contains("food")
+    );
 
     cell.classList.add("food");
 }
@@ -130,7 +149,11 @@ export function changeDirection(e, lastDirection, keys) {
     }
 }
 
-export function displayScore(value) {
+/**
+ * Refresh score on DOM.
+ * @param value
+ */
+export function displayScore(id, value) {
     if(!value) {
         const score = document.createElement("div");
         score.id = "score";

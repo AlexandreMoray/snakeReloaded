@@ -36,12 +36,17 @@ h2 {
   border: 1px solid aliceblue;
   border-radius: 4px;
 }
-.snake {
+[class^="snake"] {
   padding: 2px;
-  background-color: red;
   background-clip: content-box;
   border-radius: 6px;
   animation: outlining 0.15s;
+}
+.snake-1 {
+  background-color: red;
+}
+.snake-2 {
+  background-color: orange;
 }
 .wall {
   background-color: darkblue;

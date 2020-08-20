@@ -1,6 +1,6 @@
 import {Snake} from "./snake/snake.js";
 import {generate, isDoor, sleep, throwFood, displayScore} from "./utils/utils.js";
-import {GAME_SIZE, GAME_SPEED} from "./constants/constants.js";
+import {GAME_SIZE, GAME_SPEED, EXTRA_FOOD_COUNT, CELL_ID, DOOR_ID, WALL_ID} from "./constants/constants.js";
 
 (() => {
     const gameContainer = createMap();
@@ -15,41 +15,45 @@ function createMap() {
 
     for(let i=0; i<GAME_SIZE+2; ++i) {
         // First wall line
-        container.appendChild(generate(isDoor(i, GAME_SIZE+2) ? "door" : "wall"));
+        container.appendChild(generate(isDoor(i, GAME_SIZE+2) ? DOOR_ID : WALL_ID));
     }
     for(let i=0; i<GAME_SIZE; ++i) {
         // Left wall column
-        container.appendChild(generate(isDoor(i) ? "door" : "wall"));
+        container.appendChild(generate(isDoor(i) ? DOOR_ID : WALL_ID));
         // All game cells
         for(let j=0; j<GAME_SIZE; ++j) {
-            const cell = generate("cell");
+            const cell = generate(CELL_ID);
             cell.id = `${j}:${i}`;
             container.appendChild(cell);
         }
         // Right wall column
-        container.appendChild(generate(isDoor(i) ? "door" : "wall"));
+        container.appendChild(generate(isDoor(i) ? DOOR_ID : WALL_ID));
     }
     for(let i=0; i<GAME_SIZE+2; ++i) {
         // Last wall line
-        container.appendChild(generate(isDoor(i, GAME_SIZE+2) ? "door" : "wall"));
+        container.appendChild(generate(isDoor(i, GAME_SIZE+2) ? DOOR_ID : WALL_ID));
     }
 
     return container;
 }
 
 async function start() {
-    const snake = new Snake(["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"]);
-
-    displayScore();
-    throwFood();
-
+    let snakes = [];
+    let count = 1;
     let alive = true;
 
+    snakes.push(new Snake(["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"]));
+    snakes.push(new Snake(["KeyW", "KeyS", "KeyA", "KeyD"]));
+    //displayScore();
+    throwFood();
+    await sleep(3000);
+
     do {
-        alive = snake.move();
-        snake.actualDirection.used = true;
-        displayScore(snake.score);
+        alive = snakes.every(snake => snake.move());
+        snakes.forEach(snake => {snake.actualDirection.used = true;});
+        count%EXTRA_FOOD_COUNT === 0 && throwFood();
         await sleep(GAME_SPEED);
+        count++;
     } while(alive);
 }
 
