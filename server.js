@@ -1,5 +1,6 @@
-const connect = require('connect');
-const serveStatic = require('serve-static');
+import connect from "connect";
+import serveStatic from "serve-static";
+
 const DIRECTORY_NAME = './game';
 
 connect()
