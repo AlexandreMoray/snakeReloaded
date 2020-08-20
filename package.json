@@ -25,5 +25,6 @@
   "bugs": {
     "url": "https://github.com/AlexandreMoray/snakeReloaded/issues"
   },
-  "homepage": "https://github.com/AlexandreMoray/snakeReloaded#readme"
+  "homepage": "https://github.com/AlexandreMoray/snakeReloaded#readme",
+  "type": "module"
 }

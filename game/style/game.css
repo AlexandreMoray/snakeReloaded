@@ -6,12 +6,16 @@ html {
 }
 body {
   height: 100%;
-  background: aliceblue;
+  background-color: ghostwhite;
+}
+h2 {
+  text-align: center;
 }
 #root {
   width: 100%;
   height: 100%;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 }
@@ -19,15 +23,25 @@ body {
   width: 440px;  /* cell width * (game size + 2) */
   display: flex;
   flex-wrap: wrap;
+  background: aliceblue;
+}
+#score {
+  padding: 20px;
+  display: flex;
 }
 .cell, .wall, .door {
   width: 20px;
   height: 20px;
-  border: 1px solid black;
   box-sizing: border-box;
+  border: 1px solid aliceblue;
+  border-radius: 4px;
 }
 .snake {
+  padding: 2px;
   background-color: red;
+  background-clip: content-box;
+  border-radius: 6px;
+  animation: outlining 0.15s;
 }
 .wall {
   background-color: darkblue;
@@ -36,5 +50,13 @@ body {
   background-color: yellow;
 }
 .food {
+  border-radius: 100%;
   background-color: green;
+}
+
+@keyframes outlining {
+  from, to {
+    padding: 0px;
+    border: 1px solid red;
+  }
 }
