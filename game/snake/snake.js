@@ -24,10 +24,9 @@ export class Snake {
         const previousPos = elementToPos(this.body.head);
         const newHead = posToElement(nextCellPos(previousPos, this.actualDirection));
 
-        if(!newHead) {
+        if(!newHead || newHead.classList.contains("snake")) {
             return false;
-        }
-        else {
+        } else {
             this.body.head = newHead;
             this.body.tail.push(previousPos);
             this.body.head.classList.add("snake");
