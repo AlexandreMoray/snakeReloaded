@@ -36,17 +36,15 @@ h2 {
   border: 1px solid aliceblue;
   border-radius: 4px;
 }
-[class^="snake"] {
-  padding: 2px;
-  background-clip: content-box;
-  border-radius: 6px;
-  animation: outlining 0.15s;
-}
 .snake-1 {
+  border-radius: 100%;
   background-color: red;
+  animation: bigger-red 0.15s;
 }
 .snake-2 {
+  border-radius: 100%;
   background-color: orange;
+  animation: bigger-orange 0.15s;
 }
 .wall {
   background-color: darkblue;
@@ -55,13 +53,23 @@ h2 {
   background-color: yellow;
 }
 .food {
+  padding: 2px;
+  background-clip: content-box;
   border-radius: 100%;
   background-color: green;
 }
 
-@keyframes outlining {
+@keyframes bigger-red {
   from, to {
     padding: 0px;
+    border-radius: 4px;
     border: 1px solid red;
+  }
+}
+@keyframes bigger-orange {
+  from, to {
+    padding: 0px;
+    border-radius: 4px;
+    border: 1px solid orange;
   }
 }
