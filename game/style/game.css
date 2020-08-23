@@ -23,7 +23,7 @@ h2 {
   width: 440px;  /* cell width * (game size + 2) */
   display: flex;
   flex-wrap: wrap;
-  background: aliceblue;
+  background: lightblue;
 }
 #score {
   padding: 20px;
@@ -33,8 +33,6 @@ h2 {
   width: 20px;
   height: 20px;
   box-sizing: border-box;
-  border: 1px solid aliceblue;
-  border-radius: 4px;
 }
 .snake-1 {
   border-radius: 100%;
@@ -48,11 +46,12 @@ h2 {
 }
 .wall {
   background-color: darkblue;
+  border-radius: 4px;
 }
 .door {
-  background-color: yellow;
+  background-color: transparent;
 }
-.food {
+.food, .bonus {
   padding: 2px;
   background-clip: content-box;
   border-radius: 100%;

@@ -1,5 +1,5 @@
-import {changeDirection, elementToPos, nextCellPos, posToElement, throwFood, randomPosition} from "../utils/utils.js";
-import {FOOD_SCORE, GAME_SIZE, CELL_ID, FOOD_ID} from "../constants/constants.js";
+import {changeDirection, elementToPos, nextCellPos, posToElement, throwFood, randomPosition, posEquals} from "../utils/utils.js";
+import {FOOD_SCORE, GAME_SIZE, CELL_ID, FOOD_ID, SNAKE_PREFIX} from "../constants/constants.js";
 
 export class Snake {
 
@@ -8,7 +8,7 @@ export class Snake {
     constructor(keys) {
         Snake.count++;
         this.score = 0;
-        this.id = `snake-${Snake.count}`;
+        this.id = SNAKE_PREFIX + Snake.count;
         this.actualDirection = {
             x: 0,
             y: -1,
@@ -31,23 +31,39 @@ export class Snake {
         const previousPos = elementToPos(this.body.head);
         const newHead = posToElement(nextCellPos(previousPos, this.actualDirection));
 
+        this.actualDirection.used = true;
+
         if(!newHead || newHead.classList.contains(this.id)) {
             return false;
         } else {
             this.body.head = newHead;
-            this.body.tail.push(previousPos);
+            this.body.tail.unshift(previousPos);
             this.body.head.classList.add(this.id);
             this.score++;
 
-            if(!this.body.head.classList.contains(FOOD_ID)) {
-                posToElement(this.body.tail.shift()).classList.remove(this.id);
-            } else {
-                this.body.head.classList.remove(FOOD_ID);
-                throwFood();
+            if(this.body.head.classList.contains(FOOD_ID.classic))
+            {
+                this.body.head.classList.remove(FOOD_ID.classic);
                 this.score+=FOOD_SCORE;
+                throwFood();
+            } else if(this.body.head.classList.contains(FOOD_ID.bonus)) {
+                this.body.head.classList.remove(FOOD_ID.bonus);
+                this.score+=FOOD_SCORE;
+            } else {
+                posToElement(this.body.tail.pop())?.classList.remove(this.id);
             }
             return true;
         }
+    }
+
+    cutTail(pos) {
+        const cutBeginning = this.body.tail.filter(cell => posEquals(cell, pos))[0];
+
+        const cutCells = this.body.tail.splice(this.body.tail.indexOf(cutBeginning));
+        posToElement(cutCells.shift()).classList.remove(this.id);
+        cutCells.forEach(cell => {
+            posToElement(cell).classList.replace(this.id, FOOD_ID.bonus);
+        });
     }
 
     initHeadRandomly() {
@@ -60,5 +76,15 @@ export class Snake {
         randomHead.classList.add(this.id);
 
         return randomHead;
+    }
+
+    static handleCollision(snakes = []) {
+        snakes.forEach(snake => {
+            const snakeHead = snake.body.head;
+            if(snakeHead.classList.length > 2) {
+                const otherSnake = snakes.filter(otherSnake => otherSnake.id === snakeHead.classList[1]);
+                otherSnake.length === 1 && otherSnake[0].cutTail(elementToPos(snakeHead));
+            }
+        })
     }
 }

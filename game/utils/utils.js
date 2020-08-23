@@ -1,4 +1,4 @@
-import {GAME_SIZE, CELL_ID, SNAKE_PREFIX} from "../constants/constants.js";
+import {GAME_SIZE, CELL_ID, SNAKE_PREFIX, FOOD_ID} from "../constants/constants.js";
 
 /**
  * Wait the amount of milliseconds given.
@@ -46,9 +46,10 @@ export function randomPosition(min = 0, max = GAME_SIZE) {
 
 /**
  * Spawns food randomly on the map.
+ * @param type
  */
-export function throwFood() {
-    let x, y, cell;
+export function throwFood(type = FOOD_ID.classic) {
+    let cell;
 
     do {
         const {x, y} = randomPosition();
@@ -58,10 +59,21 @@ export function throwFood() {
         || !cell.classList.contains(CELL_ID)
         || cell.classList.contains(SNAKE_PREFIX + 1)
         || cell.classList.contains(SNAKE_PREFIX + 2)
-        || cell.classList.contains("food")
+        || cell.classList.contains(FOOD_ID.classic)
+        || cell.classList.contains(FOOD_ID.bonus)
     );
 
-    cell.classList.add("food");
+    cell.classList.add(type);
+}
+
+/**
+ * Returns true if both pos are equal.
+ * @param pos1
+ * @param pos2
+ * @returns {boolean}
+ */
+export function posEquals(pos1, pos2) {
+    return (pos1.x === pos2.x && pos1.y === pos2.y);
 }
 
 /**
@@ -83,7 +95,6 @@ export function posToElement(pos) {
     if(pos.x >= 0 && pos.y >= 0 && pos.x < GAME_SIZE && pos.y < GAME_SIZE) {
         return document.getElementById(`${pos.x}:${pos.y}`);
     } else {
-        console.log("fail");
         return undefined;
     }
 }

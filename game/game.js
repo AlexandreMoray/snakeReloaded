@@ -1,6 +1,6 @@
 import {Snake} from "./snake/snake.js";
 import {generate, isDoor, sleep, throwFood, displayScore} from "./utils/utils.js";
-import {GAME_SIZE, GAME_SPEED, EXTRA_FOOD_COUNT, CELL_ID, DOOR_ID, WALL_ID} from "./constants/constants.js";
+import {GAME_SIZE, GAME_SPEED, EXTRA_FOOD_COUNT, CELL_ID, DOOR_ID, WALL_ID, FOOD_ID} from "./constants/constants.js";
 
 (() => {
     const gameContainer = createMap();
@@ -50,8 +50,8 @@ async function start() {
 
     do {
         alive = snakes.every(snake => snake.move());
-        snakes.forEach(snake => {snake.actualDirection.used = true;});
-        count%EXTRA_FOOD_COUNT === 0 && throwFood();
+        Snake.handleCollision(snakes);
+        count%EXTRA_FOOD_COUNT === 0 && throwFood(FOOD_ID.bonus);
         await sleep(GAME_SPEED);
         count++;
     } while(alive);
