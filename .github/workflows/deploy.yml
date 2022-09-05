@@ -1,0 +1,44 @@
+  name: Snake Reloaded Workflow
+
+  on:
+    push:
+      branches:
+        - master
+    pull_request:
+      branches:
+        - master
+
+  jobs:
+    build:
+      name: Build and Deploy
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout code
+          uses: actions/checkout@master
+
+        - name: Set up Docker Buildx
+          uses: docker/setup-buildx-action@master
+
+        - name: Login to DockerHub
+          uses: docker/login-action@master
+          with:
+            username: ${{ secrets.DOCKER_USERNAME }}
+            password: ${{ secrets.DOCKER_PASSWORD }}
+
+        - name: Build and publish Docker image
+          uses: docker/build-push-action@master
+          with:
+            push: true
+            tags: amoray/snake-reloaded:latest
+
+        - name: Deploy to amoray.fr
+          uses: appleboy/ssh-action@master
+          with:
+            host: ${{ secrets.AMORAY_SERVER_SSH_IP }}
+            username: ${{ secrets.AMORAY_SERVER_SSH_USERNAME }}
+            password: ${{ secrets.AMORAY_SERVER_SSH_PASSWORD }}
+            port: ${{ secrets.AMORAY_SERVER_SSH_PORT }}
+            script: |
+              docker pull amoray/snake-reloaded
+              docker rm -f snake-reloaded-container
+              docker run --name snake-reloaded-container -d -p 8090:8090 amoray/snake-reloaded

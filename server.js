@@ -5,4 +5,4 @@ const DIRECTORY_NAME = './game';
 
 connect()
     .use(serveStatic(DIRECTORY_NAME))
-    .listen(8080, () => console.log('Server running on 8080...'));
+    .listen(8090, () => console.log('Server running on 8090...'));
