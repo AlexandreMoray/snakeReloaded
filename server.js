@@ -1,7 +1,7 @@
 import connect from "connect";
 import serveStatic from "serve-static";
 
-const DIRECTORY_NAME = './game';
+const DIRECTORY_NAME = './src';
 
 connect()
     .use(serveStatic(DIRECTORY_NAME))

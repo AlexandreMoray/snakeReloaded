@@ -1,0 +1,82 @@
+html {
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+body {
+  height: 100%;
+  background-color: #2c2f33;
+}
+h2 {
+  text-align: center;
+  color:#db9200;
+}
+#root {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+#game-container, #score, #speed, #game-over, h2 {
+  display: flex;
+  justify-content: center;
+  width: 440px;  /* cell width * (game size + 2) */
+  background-color: #23272a99;
+  box-shadow: inset 2px 2px 5px #23272A;
+  border-radius: 20px;
+  padding: 15px 15px;
+  margin: 10px;
+}
+#game-container {
+  flex-wrap: wrap;
+}
+#score {
+  color: green;
+  font-size: 1.5em;
+}
+#speed {
+  color: #006192;
+  font-size: 1.5em;
+}
+#game-over {
+  color: red;
+  font-size: 3em;
+}
+.cell, .wall, .door {
+  width: 20px;
+  height: 20px;
+  box-sizing: border-box;
+  border: 1px solid #23272a99;
+  border-radius: 4px;
+}
+.snake {
+  padding: 1px;
+  background-color: #db9200;
+  background-clip: content-box;
+  border-radius: 6px;
+  animation: outlining 0.15s;
+}
+.wall {
+  background-color: #006192;
+}
+.door {
+  background-color: #14131399;
+}
+.food {
+  border-radius: 100%;
+  background-color: green;
+}
+.cell {
+  box-shadow: inset 2px 2px 6px #23272a99;
+}
+
+@keyframes outlining {
+  from, to {
+    padding: 0px;
+    border: 1px solid #db9200;
+    box-shadow: 4px 4px 10px #23272a99;
+  }
+}

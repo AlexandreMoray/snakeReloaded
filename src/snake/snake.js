@@ -37,7 +37,7 @@ export class Snake {
             } else {
                 this.body.head.classList.remove("food");
                 throwFood();
-                this.score+=50;
+                this.score+=100;
             }
             return true;
         }
