@@ -1,0 +1,30 @@
+{
+  "name": "snakereloaded",
+  "version": "1.0.0",
+  "description": "A Snake game you will see nowhere else",
+  "main": "server.js",
+  "dependencies": {
+    "connect": "^3.7.0",
+    "serve-static": "^1.14.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AlexandreMoray/snakeReloaded.git"
+  },
+  "keywords": [
+    "Snake",
+    "Game",
+    "Reloaded"
+  ],
+  "author": "Alexandre Moray",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/AlexandreMoray/snakeReloaded/issues"
+  },
+  "homepage": "https://github.com/AlexandreMoray/snakeReloaded#readme",
+  "type": "module"
+}
